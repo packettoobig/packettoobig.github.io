@@ -9,7 +9,7 @@ excerpt: First post of the VXLAN BGP EVPN Serie. I will probably do more, like a
 
 This week I heavily focused on the VXLAN BGP EVPN technology in EVE-NG.
 Here is the topology I'm using : 
-![](media_vxlan-bgp-evpn-lab-part1/Capture.PNG)
+![](/_media/vxlan-bgp-evpn-lab-part1/Capture.PNG)
 If you want to learn more about BGP EVPN and VXLAN, I can recommend the [Network Direction Youtube Channel](https://www.youtube.com/channel/UCtuXekfqj-paqsxtqVNCC2A), and particularly their VxLAN Playlist : 
 
 Now that it is out of the way, let's focus on configuration.
