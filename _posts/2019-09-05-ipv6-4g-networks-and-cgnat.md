@@ -17,7 +17,7 @@ I did some research and I still can't figure why end user devices are getting IP
 
 My understanding of CG-NAT (also called NAT444) is represented in this nice diagram that I found [here](https://reggle.wordpress.com/2012/07/15/rfc-6598-carrier-grade-nat-explained/) :
 
-![nat444-1](/content/images/2019/09/nat444-1.png)
+![nat444-1](media_ipv6-4g-networks-and-cgnat/nat444-1.png)
 
 In theory my phone (and my colleague's) should be getting regular RFC1918 addresses then, so why is that ?
 
