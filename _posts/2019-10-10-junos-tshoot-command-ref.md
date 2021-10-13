@@ -1,6 +1,7 @@
 ---
 title: Junos quick troubleshooting command reference
 slug: junos-tshoot-command-ref
+redirect_from : '/junos-tshoot-command-ref'
 date_published: 2019-10-10T07:18:12.000Z
 date_updated: 2021-04-20T07:27:09.000Z
 tags: Juniper

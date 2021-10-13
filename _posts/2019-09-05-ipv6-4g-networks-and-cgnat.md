@@ -1,6 +1,7 @@
 ---
 title: IPv6, 4G Networks and CG-NAT
 slug: ipv6-4g-networks-and-cgnat
+redirect_from: '/ipv6-4g-networks-and-cgnat'
 date_published: 2019-09-05T13:21:43.000Z
 date_updated: 2020-10-31T18:46:38.000Z
 tags: Thoughs, IPv6

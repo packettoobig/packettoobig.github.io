@@ -1,6 +1,7 @@
 ---
 title: VXLAN BGP EVPN Lab - Internal Connectivity
 slug: vxlan-bgp-evpn-lab-part1
+redirect_from: '/vxlan-bgp-evpn-lab-part1'
 date_published: 2019-08-27T12:26:18.000Z
 date_updated: 2020-10-31T18:41:42.000Z
 tags: BGP, Eve-NG, Cisco, Datacenter, VXLAN

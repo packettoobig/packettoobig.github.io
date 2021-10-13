@@ -1,6 +1,7 @@
 ---
 title: IOS XR quick troubleshooting command reference
 slug: iosxr-tshoot-command-ref
+redirect_from: '/iosxr-tshoot-command-ref'
 date_published: 2021-04-20T07:27:43.000Z
 date_updated: 2021-04-20T07:27:43.000Z
 tags: Cisco
