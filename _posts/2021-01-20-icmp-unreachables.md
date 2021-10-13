@@ -1,7 +1,9 @@
 ---
 title: ICMP Unreachables
 slug: icmp-unreachables
-redirect_from: '/icmp-unreachables'
+redirect_from: 
+  - '/icmp-unreachables'
+  - '/icmp-unreachables/'
 date_published: 2021-01-20T11:10:00.000Z
 date_updated: 2021-01-29T07:02:57.000Z
 tags: Security, IPv6, IPv4
