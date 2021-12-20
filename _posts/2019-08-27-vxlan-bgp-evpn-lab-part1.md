@@ -9,9 +9,9 @@ excerpt: First post of the VXLAN BGP EVPN Serie. I will probably do more, like a
 ---
 
 This week I heavily focused on the VXLAN BGP EVPN technology in EVE-NG.
-Here is the topology I'm using : 
-![](/assets/vxlan-bgp-evpn-lab-part1/Capture.PNG)
-If you want to learn more about BGP EVPN and VXLAN, I can recommend the [Network Direction Youtube Channel](https://www.youtube.com/channel/UCtuXekfqj-paqsxtqVNCC2A), and particularly their VxLAN Playlist : 
+Here is the topology I'm using :
+![Lab Topology](/assets/vxlan-bgp-evpn-lab-part1/Capture.PNG)
+If you want to learn more about BGP EVPN and VXLAN, I can recommend the [Network Direction Youtube Channel](https://www.youtube.com/channel/UCtuXekfqj-paqsxtqVNCC2A), and particularly their VxLAN Playlist :
 
 Now that it is out of the way, let's focus on configuration.
 We will be using NX-OS 9.2(2), on the Nexus 9000v platform, in my EVE-NG lab.
@@ -24,7 +24,7 @@ We will use basic OSPF for this (for configuration scalability, we also often us
 
 Please Note that **I will not** publish every switch configuration, because I want my readers to think, and not just copy-paste text.😉
 
-#### SPINE1
+### SPINE1
 
     hostname SPINE1
     feature ospf
@@ -58,7 +58,6 @@ Please Note that **I will not** publish every switch configuration, because I wa
     interface loopback0
       ip address 10.255.255.1/32
       ip router ospf 1 area 0.0.0.0
-    
 
 #### LEAF1
 
@@ -91,7 +90,6 @@ Please Note that **I will not** publish every switch configuration, because I wa
     interface loopback0
       ip address 10.255.255.1/32
       ip router ospf 1 area 0.0.0.0
-    
 
 You probably noticed a few things :
 
@@ -113,7 +111,6 @@ First we need to check the OSPF adjacencies :
      10.255.0.1        1 FULL/ -          03:54:04 10.1.1.0        Eth1/11
      10.255.0.2        1 FULL/ -          03:54:01 10.1.2.0        Eth1/12
      10.255.0.3        1 FULL/ -          03:54:10 10.1.3.0        Eth1/13
-    
 
 Then, we are checking the proper communication between the spine and the leaves
 
@@ -131,7 +128,6 @@ Then, we are checking the proper communication between the spine and the leaves
     PING 10.255.0.3 (10.255.0.3): 56 data bytes
     64 bytes from 10.255.0.3: icmp_seq=0 ttl=254 time=2.941 ms
     64 bytes from 10.255.0.3: icmp_seq=1 ttl=254 time=3.659 ms
-    
 
 We finish our testing with a traceroute, showing that we are indeed two hops away from SPINE2
 
@@ -139,7 +135,6 @@ We finish our testing with a traceroute, showing that we are indeed two hops awa
     traceroute to 10.255.255.2 (10.255.255.2) from 10.255.255.1 (10.255.255.1), 30 hops max, 40 byte packets
      1  10.1.1.0 (10.1.1.0)  3.591 ms  3.323 ms  4.003 ms
      2  10.255.255.2 (10.255.255.2)  4.227 ms  4.18 ms  4.253 ms
-    
 
 Now, let's move to the good stuff, the Overlay !
 
@@ -155,7 +150,6 @@ We need to enable the following features on all equipment :
     feature fabric forwarding
     feature nv overlay
     nv overlay evpn
-    
 
 We have to configure a full BGP EVPN reachability for all Nexus switches.
 
@@ -187,7 +181,6 @@ Here is the example of SPINE1. The configuraton is similar for all equipments, s
         address-family l2vpn evpn
           send-community
           send-community extended
-    
 
 Please note that in a typical datacenter, the spines are route-reflectors. We are simplifying things a bit for better readability (but the configuration is longer because we need all the iBGP neighbors).
 
@@ -200,7 +193,6 @@ The leaves will be the only switches that handles direct host connections, and w
 I need to configure the anycast gateway mac on my leaves : I'm using mac addresses *0000.1111.1111*, *0000.1111.2222* and *0000.1111.3333* . In a real world scenario, be careful not to assign a mac address that is already assigned to a host (or will in the future).
 
     fabric forwarding anycast-gateway-mac XXXX.XXXX.XXXX
-    
 
 We will also configure the VTEP via the NVE interface.
 
@@ -208,7 +200,6 @@ We will also configure the VTEP via the NVE interface.
       no shutdown
       host-reachability protocol bgp
       source-interface loopback0
-    
 
 ### BGP verification
 
@@ -223,7 +214,6 @@ To check your neighbors, you need to type the `show bgp l2vpn evpn summary`
     10.255.0.2      4 65000     219     219        6    0    0 03:34:01 0
     10.255.0.3      4 65000     218     218        6    0    0 03:32:32 0
     10.255.255.2    4 65000     226     226        6    0    0 03:40:34 0
-    
 
 We see here the proper establishment of the neighboring relationship, but we are still not sending or receiving any prefix/mac. For this part to work, we need to work on the full configuration of the VNI, VRF, VLANs, and gateways.
 
@@ -244,7 +234,7 @@ The following features will be deployed :
 
 Please note that you **don't need to configure anything on the Spines anymore** at this point, since the VTEPs are the leaves !
 
-#### L3VNI
+### L3VNI
 
 Basically, in a datacenter environment, we will have "Tenants" or "Customers". We want every customer/tenant to be isolated in its own VRF.
 
@@ -260,7 +250,6 @@ So, we first create a VLAN that we associate with a VNI :
 
     vlan 10
       vn-segment 10
-    
 
 Then, we create our VRF and associate our VNI number with it:
 
@@ -270,7 +259,6 @@ Then, we create our VRF and associate our VNI number with it:
       address-family ipv4 unicast
         route-target both auto
         route-target both auto evpn
-    
 
 After that, we create our L3VNI routing SVI :
 
@@ -278,7 +266,6 @@ After that, we create our L3VNI routing SVI :
       vrf member VRF10
       no shutdown
       ip forward
-    
 
 Please note the "ip forward" command that allows it to do routing even without an ip address.
 
@@ -286,7 +273,6 @@ We then tell our VTEP to associate the VNI number 10 to our VRF.
 
     interface nve1
       member vni 10 associate-vrf
-    
 
 The L3VNI part is over, we can now create our Bridge Domains (aka L2VNI)
 
@@ -296,7 +282,6 @@ On LEAF1, we will create a locally-signifiant VLAN1111, with a fabric-wide VXLAN
 
     vlan 1111
       vn-segment 111111
-    
 
 To use BGP, we need to inform the VTEP to do 2 things :
 
@@ -307,7 +292,6 @@ To use BGP, we need to inform the VTEP to do 2 things :
       member vni 111111
         suppress-arp
         ingress-replication protocol bgp
-    
 
 We then need to create our anycast-gateway (for inter-VXLAN routing basically)
 
@@ -316,7 +300,6 @@ We then need to create our anycast-gateway (for inter-VXLAN routing basically)
       vrf member VRF10
       ip address 192.168.1.254/24
       fabric forwarding mode anycast-gateway
-    
 
 And we finish the config by telling evpn (so bgp) to announce this VNI with automatically defined RD and RT (best-practice for a Cisco-Only fabric).
 
@@ -325,7 +308,6 @@ And we finish the config by telling evpn (so bgp) to announce this VNI with auto
         rd auto
         route-target import auto
         route-target export auto
-    
 
 And we finish by configuring the access ports (like we've been doing forever)
 
@@ -333,7 +315,6 @@ And we finish by configuring the access ports (like we've been doing forever)
       switchport mode access
       switchport access vlan 1111
       no shutdown
-    
 
 We need to do the same thing on LEAF2 and LEAF3 at this point.
 
@@ -345,7 +326,6 @@ Please note that on old version of NX-OS, we also needed to configure the follow
       vrf VRF10
         address-family ipv4 unicast
           advertise l2vpn evpn
-    
 
 There is no need to do that anymore. If you do it on the newer Nexus platform, you will get the following message : `Command 'advertise l2vpn evpn' has been deprecated and no longer has any effect.` I'm just putting it here for reference for the folks that still use old versions of NX-OS.
 
@@ -363,7 +343,6 @@ We can see there is no issue communicating with a host on the same switch (we ar
     PING 192.168.1.2 (192.168.1.2) 56(84) bytes of data.
     64 bytes from 192.168.1.2: icmp_seq=1 ttl=64 time=5.15 ms
     64 bytes from 192.168.1.2: icmp_seq=2 ttl=64 time=4.33 ms
-    
 
 We are also able to ping another host using the same VXLAN, on another switch.
 
@@ -371,7 +350,6 @@ We are also able to ping another host using the same VXLAN, on another switch.
     PING 192.168.1.4 (192.168.1.4) 56(84) bytes of data.
     64 bytes from 192.168.1.4: icmp_seq=1 ttl=64 time=11.0 ms
     64 bytes from 192.168.1.4: icmp_seq=2 ttl=64 time=11.0 ms
-    
 
 Here is the interesting stuff : we are able to ping a host that is on another switch, and on another VXLAN, using our anycast gateway and L3VNI !
 
@@ -379,7 +357,6 @@ Here is the interesting stuff : we are able to ping a host that is on another sw
     PING 192.168.2.8 (192.168.2.8) 56(84) bytes of data.
     64 bytes from 192.168.2.8: icmp_seq=1 ttl=62 time=15.4 ms
     64 bytes from 192.168.2.8: icmp_seq=2 ttl=62 time=15.4 ms
-    
 
 ### Useful commands
 
@@ -440,7 +417,6 @@ Here is the interesting stuff : we are able to ping a host that is on another sw
     .0.3
     2222        0050.0000.0d00 192.168.2.8     BGP    --            0         10.255
     .0.3
-    
 
 There is also the `show bgp l2vpn evpn` command, but the output is so large that I can't fit it in here. It is basically the "show me everything" command
 

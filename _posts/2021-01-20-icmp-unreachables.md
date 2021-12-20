@@ -30,14 +30,12 @@ If you are running Cisco IOS/IOS-XE or NX-OS, **do not ever do this**
     interface <name>
       no ip unreachables
       no ipv6 unreachables
-    
 
 On IOS-XR, the equivalent would be :
 
     interface <name>
       no ipv4 unreachables
       no ipv6 unreachables
-    
 
 If you read the wikipedia page, you already know why you should not do this.
 
@@ -58,7 +56,6 @@ Your ACL would look something like this :
     ipv6 access-list ACL-ALLOW-WEB-V6
      permit tcp any any eq www
      permit tcp any any eq 443
-    
 
 It makes sense right ? We only want a web access to the internet !
 
@@ -74,7 +71,6 @@ If you realy want to do ACLs, you should really do this instead:
      permit tcp any any eq www
      permit tcp any any eq 443
      permit icmp any any
-    
 
 And you have a really strict security policy, the [RFC4890](https://tools.ietf.org/html/rfc4890) compliant ACL would probably look something like this:
 
@@ -88,7 +84,6 @@ And you have a really strict security policy, the [RFC4890](https://tools.ietf.o
      permit icmp any any parameter-option
      permit icmp any any reassembly-timeout
      permit icmp any any header
-    
 
 However I would still recommend you to at least allow echo and echo-reply as well, plus it is required in IPv6 for Teredo.
 
