@@ -316,12 +316,14 @@ Quite easy as well, we just create one neighbor-group per AS per address-family,
 
 The only specific thing is, sometimes, one router might be on two IXPs at once, and we do not want to have duplicate neighbor-group for that, so we just make sure that we keep track of which ones were created with these lines
 
-```yaml
-    {%- set seen_asns = [] %}
+```jinja
+{% raw %}
+    {% set seen_asns = [] %}
     {% for neighbor in local_ixp_neighbors %}
       {% if neighbor.asn not in seen_asns|unique %}
 # And later in the file
 {{- seen_asns.append(neighbor.asn) }}
+{% endraw %}
 ```
 
 ## Running the playbook
