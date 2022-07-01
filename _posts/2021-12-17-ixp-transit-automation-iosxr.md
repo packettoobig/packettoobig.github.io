@@ -3,9 +3,15 @@ title: IXP and Transit automation using the IOS-XR platform
 slug: ixp-transit-automation-iosxr
 redirect_from: 'ixp-transit-automation-iosxr/'
 date_published: 2021-12-21 12:00:00
-date_updated: 2021-10-21 12:00:00
+date_updated: 2022-07-01 12:00:00
 tags: BGP, Cisco
 excerpt: Peering and transit made easy
+---
+
+| UPDATE 2022-07-01                                                                                                              |
+|:-------------------------------------------------------------------------------------------------------------------------------|
+| The two (updated) python modules are now available as an [ansible collection](https://galaxy.ansible.com/packettoobig/peering) |
+
 ---
 
 This post might be consequent, so I will update it if there are mistakes or typos.  
