@@ -12,8 +12,6 @@ excerpt: Peering and transit made easy
 |:-------------------------------------------------------------------------------------------------------------------------------|
 | The two (updated) python modules are now available as an [ansible collection](https://galaxy.ansible.com/packettoobig/peering) |
 
----
-
 This post might be consequent, so I will update it if there are mistakes or typos.  
 I might also improve the automation in the future.
 
